@@ -1,10 +1,13 @@
-# PointNav Agents in RoboTHOR
+---
+title: PointNav Agents in RoboTHOR
+layout: default
+---
 
 ### Team Members
-- Alice Smith  
-- Bob Kumar  
-- Charlie Nguyen  
-- [Your Name Here]
+- Suryavardan Suresh  
+- Twishaa Sahay  
+- Dev Pant  
+- Atmaj Koppikar
 
 ---
 
