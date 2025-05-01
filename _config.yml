@@ -1,7 +1,4 @@
-plugins:
-  - jekyll-relative-links
-relative_links:
-  enabled: true
-  collections: true
-include:
-  - pointnav_project_full.md
+title: PointNav
+description: Project Report for the PointNav RL project
+theme: minima  # Optional, GitHub Pages supports a few themes
+markdown: kramdown
