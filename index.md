@@ -304,11 +304,14 @@ The following plot compares the training reward trajectories of our learning-bas
 
 The following videos show full PointNav episodes for each agent. These rollouts were recorded during training and demonstrate qualitative differences in decision-making and path quality.
 
-
-<video width="320" height="240" controls src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/dqn corner scene.mp4" type="video/mp4"></video> | <video width="320" height="240" controls src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/DQN couch scene.mp4" type="video/mp4"></video> 
-|:--------------------------------:|:--------------------------------:|
-| Table                        | Couch                        |
-
+| Agent     | RGB Video | Depth Video |
+|-----------|-----------|-------------|
+| Random    | ![Depth Video](https://github.com/user-attachments/assets/57a7868b-8e57-4f3d-9cb9-a941f2d9a188) | <video width="320" height="240" controls>
+  <source src="assets/FloorPlan_Train3_2_random_depth.mp4" type="video/mp4">
+</video> |
+| Heuristic | [▶️](videos/heuristic_rgb.mp4) | [▶️](videos/heuristic_depth.mp4) |
+| DQN       | [▶️](videos/dqn_rgb.mp4) | [▶️](videos/dqn_depth.mp4) |
+| PPO       | [▶️](videos/ppo_rgb.mp4) | [▶️](videos/ppo_depth.mp4) |
 
 ---
 
