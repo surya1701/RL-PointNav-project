@@ -126,12 +126,6 @@ To guide the agent effectively during training, we iterated over multiple reward
 
 At each timestep, the reward is computed as:
 
-\[
-r = r_{\text{base}} + r_{\text{collision}} + r_{\text{distance}} + r_{\text{loop\_penalty}} + r_{\text{stationary\_penalty}} + r_{\text{depth\_bonus}} + r_{\text{success}}
-\]
-
-Where:
-
 | Component            | Value / Condition                                                                 |
 |----------------------|-----------------------------------------------------------------------------------|
 | **Base step penalty**       | \(-0.01 \) per step                                      |
