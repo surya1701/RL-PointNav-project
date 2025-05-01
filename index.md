@@ -268,9 +268,7 @@ The **LSTM helps capture this temporal continuity**, giving the policy memory ac
 - Needs proper hidden state handling
 - Leads to smoother, more purposeful navigation policies
 
-**Visual Aid:**  
-📊 *[Placeholder: PPO (with LSTM) vs DQN reward plot]*  
-🎥 *[Placeholder: PPO with LSTM video sample]*
+<img src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/ppo_arch.jpeg"/>
 
 ---
 
