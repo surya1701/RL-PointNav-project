@@ -63,7 +63,7 @@ We use the [AllenAct](https://github.com/allenai/allenact) implementation of the
 
 Example of one of the scenes from the dataset, with the green dot denoting the start point and the red dot denoting the end point.
 | ![Top Down view of one of the scene](https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/harder_top_down_view.png) | ![Top Down view of one of the scene](https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/harder_top_down_view.png) |
-|:--------------------------------:|:--------------------------------:|
+|--------------------------------|:--------------------------------|
 | Scene 1 | Scene 2 |
 
 
@@ -106,7 +106,7 @@ We configure the agent to receive **egocentric** observations in one of the foll
 
 | Agent RGB View         | Agent Depth Image       |
 |-------------------------|------------------------|
-<video width="320" height="240" controls src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/FloorPlan_Train3_2_random_rgb.mp4" type="video/mp4"></video> | <video width="320" height="240" controls  src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/FloorPlan_Train3_2_random_depth.mp4"></video> 
+|<video width="320" height="240" controls src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/FloorPlan_Train3_2_random_rgb.mp4" type="video/mp4"></video> | <video width="320" height="240" controls  src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/FloorPlan_Train3_2_random_depth.mp4"></video> |
 
 
 ---
@@ -305,8 +305,8 @@ The following plot compares the training reward trajectories of our learning-bas
 The following videos show full PointNav episodes for each agent. These rollouts were recorded during training and demonstrate qualitative differences in decision-making and path quality.
 
 
-<video width="320" height="240" controls src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/dqn corner scene.mp4" type="video/mp4"></video> | <video width="320" height="240" controls src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/DQN couch scene.mp4" type="video/mp4"></video> 
-|:--------------------------------:|:--------------------------------:|
+|<video width="320" height="240" controls src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/dqn corner scene.mp4" type="video/mp4"></video> | <video width="320" height="240" controls src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/DQN couch scene.mp4" type="video/mp4"></video> |
+|--------------------------------|--------------------------------|
 | Table                        | Couch                        |
 
 
