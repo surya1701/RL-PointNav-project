@@ -231,9 +231,7 @@ A model-free value-based reinforcement learning agent that learns a Q-function m
 - Not ideal for high-dimenstional Delayed rewards could hurt Q-value propagation
 - Relies on experience replay which can break temporal correlations important in navigation
 
-**Visual Aid:**  
-🧠 *[Placeholder: DQN architecture diagram]*  
-🎥 *[Placeholder: DQN rollout video thumbnail]*
+<img src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/dqn_arch.png"/> 
 
 ---
 
