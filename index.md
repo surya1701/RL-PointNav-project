@@ -295,8 +295,9 @@ Performance is assessed via:
 
 The following plot compares the training reward trajectories of our learning-based agents (DQN and PPO). PPO demonstrates more stable improvement, while DQN is more volatile but capable of sharp gains.
 
+ DQN         | PPO       |
+|-------------------------|------------------------|
 | <img src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/dqn_plot.png"/> | <img src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/ppo_plot.png"/> |
-|----------|----------|
 
 ---
 
