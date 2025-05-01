@@ -34,7 +34,10 @@ The AI2-RoboTHOR simulation framework supports two primary embodied AI navigatio
 - **Object Navigation (ObjectNav):** Navigate to an object category (e.g., "mug") based on a semantic goal.
 - **Point Navigation (PointNav):** Navigate to a specific 3D coordinate provided as a goal, using only egocentric sensory inputs.
 
-Our project focuses on the **PointNav task** using the RoboTHOR environment—a collection of 3D indoor scenes developed for research on real-world navigation and transfer learning.
+Our project focuses on the **PointNav task** using the RoboTHOR environment. While it orginially is a collection of 3D indoor scenes developed for research on real-world navigation and transfer learning. The authors have also provided environments that support navigation around the simulated scene in the Unity3D engine.
+The video below is from the creators of the dataset and the RoboTHOR tasks.
+
+<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/509326657?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="RoboTHOR"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
 
 ---
 
@@ -42,7 +45,7 @@ Our project focuses on the **PointNav task** using the RoboTHOR environment—a 
 
 We use the [AllenAct](https://github.com/allenai/allenact) implementation of the RoboTHOR PointNav dataset. Each episode specifies:
 
-- A **scene** (e.g., `FloorPlan_Train5`)
+- A **scene** (e.g., `FloorPlan_Train5_1`)
 - The agent's **initial position** and **orientation**
 - A **goal position**
 - Optionally, the **shortest path** between them for evaluation
@@ -51,16 +54,21 @@ We use the [AllenAct](https://github.com/allenai/allenact) implementation of the
 
 ```json
 {
-  "scene": "FloorPlan_Train5",
+  "scene": "FloorPlan_Train5_1",
   "initial_position": {"x": 1.5, "y": 0.9, "z": -3.0},
   "initial_orientation": 90.0,
   "target_position": {"x": 2.25, "y": 0.9, "z": -1.75}
 }
 ```
 
-We process episodes into:
-- **Single-scene** datasets (for overfitting/debugging)
-- **Multi-scene** datasets (for generalization)
+Example of one of the scenes from the dataset, with the green dot denoting the start point and the red dot denoting the end point.
+| ![Top Down view of one of the scene](https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/harder_top_down_view.png) | ![Top Down view of one of the scene](https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/harder_top_down_view.png) |
+|:--------------------------------:|:--------------------------------:|
+| Scene 1 | Scene 2 |
+
+
+Please note that the top-level view is just for demonstration, the dataset training is done on the egocentric view of the agent.
+A video of the agent's view for the second scene can be viewed in the episode rollour section below.
 
 ---
 
@@ -77,7 +85,7 @@ The RoboTHOR simulator operates with the following default settings:
 | `movementGaussianSigma` | 0.000001           |
 | `rotateGaussianSigma`   | 0.000001           |
 
-These parameters result in a **discrete action space**, where the agent can take one of the following actions at each step:
+These parameters are used to setup an environment that after each action returns the observation as a frame or image. We have a **discrete action space** i.e. the agent can take one of the following actions at each step:
 
 - `MoveAhead`
 - `RotateLeft`
@@ -89,24 +97,23 @@ These parameters result in a **discrete action space**, where the agent can take
 
 ### Observation Modalities
 
-The agent receives **egocentric** observations in one of the following formats:
+We configure the agent to receive **egocentric** observations in one of the following formats:
 - **RGB only**
 - **Depth only**
 - **RGB + Depth** (concatenated as 4 channels)
 
-#### 📷 Example Observations (placeholders)
+#### 📷 Example Observations
 
-| Top-Down Scene View     | Agent RGB View         | Agent Depth Image       |
-|-------------------------|------------------------|-------------------------|
-| ![](images/top_down.png) | ![](images/rgb_view.png) | ![](images/depth_view.png) |
+| Agent RGB View         | Agent Depth Image       |
+|-------------------------|------------------------|
+<video width="320" height="240" controls src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/FloorPlan_Train3_2_random_rgb.mp4" type="video/mp4"></video> | <video width="320" height="240" controls  src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/FloorPlan_Train3_2_random_depth.mp4"></video> 
 
-These will be replaced with actual frames from rollout episodes for final deployment.
 
 ---
 
 ### Custom Reward Function
 
-To guide the agent effectively during training, we implemented a custom **reward shaping** mechanism tailored for the PointNav task. Instead of using sparse rewards (e.g., +1 only on success), our design incorporates distance improvement, obstacle awareness, and behavior discouragement for inefficient or repetitive actions.
+To guide the agent effectively during training, we iterated over multiple reward functions. Starting with a simple motion penalty and destination reward to then implementing a custom **reward shaping** mechanism tailored for the PointNav task. We tried to incorporate distance improvement credits, obstacle awareness and behavior discouragement for inefficient or repetitive actions.
 
 ---
 
@@ -115,20 +122,20 @@ To guide the agent effectively during training, we implemented a custom **reward
 At each timestep, the reward is computed as:
 
 \[
-r = r_{\text{base}} + r_{\text{collision}} + r_{\text{distance}} + r_{\text{loop\_penalty}} + r_{\text{look\_penalty}} + r_{\text{depth\_bonus}} + r_{\text{success}}
+r = r_{\text{base}} + r_{\text{collision}} + r_{\text{distance}} + r_{\text{loop\_penalty}} + r_{\text{stationary\_penalty}} + r_{\text{depth\_bonus}} + r_{\text{success}}
 \]
 
 Where:
 
 | Component            | Value / Condition                                                                 |
 |----------------------|-----------------------------------------------------------------------------------|
-| **Base step penalty**       | \( r_{\text{base}} = -0.01 \) per step                                      |
-| **Collision penalty**       | \( r_{\text{collision}} = -1.0 \) if `lastActionSuccess = False`            |
-| **Distance shaping**        | \( r_{\text{distance}} = 2 \cdot (\text{prev\_dist} - \text{curr\_dist}) \) |
-| **Loop penalty**            | \( -0.2 \) if agent alternates between RotateLeft/Right or LookUp/Down     |
-| **Look/Spin penalty**       | \( -0.05 \) if action is Look or Rotate                                     |
+| **Base step penalty**       | \(-0.01 \) per step                                      |
+| **Collision penalty**       | \(-1.0 \) if `action fails`            |
+| **Distance shaping**        | \(2 \cdot (\text{prev\_dist} - \text{curr\_dist}) \) |
+| **Loop penalty**            | \( -0.2 \) if action is RotateLeft/Right or LookUp/Down     |
+| **Stationary penalty**       | \( -0.05 \) if action is Look or Rotate                                     |
 | **Depth navigation bonus**  | \( +0.1 \) if `MoveAhead` follows `LookUp` or `LookDown`                   |
-| **Success reward**          | \( +20.0 \) if agent is within 0.5m of goal                                 |
+| **Success reward**          | \( +10.0 \) if agent is within 0.5m of goal                                 |
 
 ---
 
@@ -148,7 +155,7 @@ ELSE:
         reward += 0.1
 
 IF goal reached (distance < 0.5m):
-    reward += 20.0
+    reward += 10.0
     done = True
 ```
 
@@ -156,11 +163,11 @@ IF goal reached (distance < 0.5m):
 
 #### 💡 Why This Reward Structure?
 
-- **Dense shaping** provides directional feedback at every step (progress = reward)
+- **Distance shaping** provides directional feedback at every step (progress = reward)
 - **Collision penalty** discourages unsafe or aggressive movement
-- **Look/spin penalties** reduce wasted actions and dithering
+- **Look/spin penalties** reduce wasted or unnecessary actions
 - **LookAhead bonus** encourages use of **depth perception** for navigation
-- **Success reward** reinforces goal-reaching behavior
+- **Success reward** largest focus on goal-reaching behavior
 
 This hybrid shaping strategy proved crucial in training learning-based agents effectively, especially in cluttered indoor scenes.
 
@@ -168,26 +175,7 @@ This hybrid shaping strategy proved crucial in training learning-based agents ef
 
 ## Experiments
 
-We implemented and evaluated a series of agents ranging from non-learning baselines to deep reinforcement learning models. All agents were trained and tested using the same episode structure, environment parameters, and custom reward function.
-
----
-
-### 🔹 Random Agent
-
-**Description:**  
-The random agent selects one of the available discrete actions at each timestep with uniform probability.
-
-**Purpose:**  
-Acts as a naive baseline to quantify the difficulty of the task and assess the impact of having no navigation strategy.
-
-**Behavior:**  
-- Often collides with obstacles
-- Spins in place
-- Rarely reaches the goal
-
-**Implementation Notes:**
-- Stateless policy
-- Uniform random over 5 actions: `MoveAhead`, `RotateLeft`, `RotateRight`, `LookUp`, `LookDown`
+We implemented and evaluated a series of agents ranging from non-learning baselines to deep reinforcement learning models. All agents were trained and tested using the same episode structure, environment parameters and custom reward function.
 
 ---
 
@@ -210,11 +198,8 @@ A rule-based agent that tries to reduce the angle between the agent’s facing d
 - No training required
 
 **Limitations:**
-- Fails in presence of obstacles or dead-ends
+- Fails in presence of obstacles or may move into dead-ends
 - Repetitive behavior (e.g., stuck loops or wall hugging)
-
-**Visual Aid:**  
-📸 *[Placeholder for a sample top-down trajectory or agent view]*
 
 ---
 
@@ -230,13 +215,15 @@ A model-free value-based reinforcement learning agent that learns a Q-function m
 **Training Details:**
 - Epsilon-greedy exploration
 - Experience replay buffer
-- Target network updates
+- Target network updates for off-policy training
 - Optimized via MSE loss between predicted and target Q-values
 
 **Observations:**
-- Learns to move toward goals in most scenes
-- Occasional instability in training (spikes in reward plot)
-- Benefits significantly from well-shaped reward function
+- Struggles with sparse/delayed rewards common in PointNav
+- Learns to move toward goals in most scenes with occasional instability in training (spikes in reward plot)
+- Benefits significantly from well-shaped reward function but could also be impacted by gaps in our reward fn
+- Not ideal for high-dimenstional Delayed rewards could hurt Q-value propagation
+- Relies on experience replay which can break temporal correlations important in navigation
 
 **Visual Aid:**  
 🧠 *[Placeholder: DQN architecture diagram]*  
@@ -247,26 +234,39 @@ A model-free value-based reinforcement learning agent that learns a Q-function m
 ### 🔹 Proximal Policy Optimization (PPO)
 
 **Description:**  
-An actor-critic RL algorithm that updates policy and value networks based on clipped surrogate objectives and advantage estimation.
+An actor-critic reinforcement learning algorithm that optimizes a clipped surrogate objective using advantage-weighted updates. PPO is widely used in visually-rich and partially observable tasks due to its stability and sample efficiency.
 
 **Architecture:**
-- Input: Resized frame (same as DQN)
-- Shared CNN encoder → 
-  - Actor head: probability distribution over actions  
-  - Critic head: value estimate of current state
+- **Input:** Resized agent-view frame (RGB or RGB+Depth)
+- **Encoder:** CNN for spatial feature extraction  
+- **Memory Module:** LSTM added after CNN to preserve temporal context across steps  
+- **Outputs:**
+  - **Actor head:** Probability distribution over discrete actions  
+  - **Critic head:** Value estimate for the current observation
+
+**Why LSTM was Added:**  
+PointNav tasks in RoboTHOR are **partially observable** — the agent doesn’t have access to a full map and must rely on previous frames to:
+- Recall where it came from
+- Avoid redundant actions like spinning in place
+- Better understand how actions influence the environment over time
+
+The **LSTM helps capture this temporal continuity**, giving the policy memory across steps.
 
 **Training Details:**
-- On-policy updates with generalized advantage estimation (GAE)
-- Clipped objective to limit large policy shifts
-- Encourages exploration through entropy regularization
+- On-policy rollouts using **Generalized Advantage Estimation (GAE)**
+- **Clipped PPO objective** to prevent unstable policy updates
+- **Entropy regularization** encourages exploration
+- LSTM hidden states are reset at the beginning of each episode and updated through each step
 
-**Strengths:**
-- More stable training compared to DQN
-- Handles longer rollouts and dense rewards well
+**Observations:**
+- Reduces action loops and wandering behavior
+- Increased computational overhead
+- Needs proper hidden state handling
+- Leads to smoother, more purposeful navigation policies
 
 **Visual Aid:**  
-📊 *[Placeholder: PPO vs DQN reward plot]*  
-🎥 *[Placeholder: PPO video sample]*
+📊 *[Placeholder: PPO (with LSTM) vs DQN reward plot]*  
+🎥 *[Placeholder: PPO with LSTM video sample]*
 
 ---
 
@@ -281,16 +281,11 @@ All agents share a common training framework, including:
 
 ---
 
-Let me know when you're ready to move to the **Results** section next. I’ll include reward plots, side-by-side comparisons, videos, and conclusion-style observations.
-
----
-
 ## Results
 
 We evaluate each agent on a held-out set of RoboTHOR PointNav episodes. Performance is assessed via:
 
-- **Total episode reward** (shaped via our custom function)
-- **Goal-reaching success** (within 0.5 meters)
+- **Average episode reward** (shaped via our custom function)
 - **Qualitative behavior** through video analysis
 
 ---
@@ -305,44 +300,15 @@ The following plot compares the training reward trajectories of our learning-bas
 
 ---
 
-### 🧭 Top-Down Trajectory Visualization
-
-Below are top-down visualizations of selected episodes, showing the start point (green), goal point (red), and agent trajectory over time. These visualizations provide insight into navigation quality and efficiency.
-
-| Random Agent | Heuristic Agent | DQN Agent | PPO Agent |
-|--------------|------------------|-----------|-----------|
-| ![](images/random_topdown.png) | ![](images/heuristic_topdown.png) | ![](images/dqn_topdown.png) | ![](images/ppo_topdown.png) |
-
-> *Figure: Sample trajectories in the same scene. Learning-based agents show more direct and successful paths to the goal.*
-
----
-
-### 👁️ Egocentric View (Agent Perception)
-
-Below are first-person observations from different agent rollouts, showing the RGB view used for decision-making. These illustrate how limited the input is—no map or external localization is available.
-
-| DQN (RGB) | PPO (Depth) |
-|-----------|-------------|
-| ![](images/dqn_rgb_view.png) | ![](images/ppo_depth_view.png) |
-
-> *Figure: Egocentric inputs processed by CNNs. The agent must learn to interpret spatial layout and depth cues visually.*
-
----
-
 ### 🎥 Episode Rollout Videos
 
-The following videos show full PointNav episodes for each agent. These rollouts were recorded during evaluation and demonstrate qualitative differences in decision-making and path quality.
+The following videos show full PointNav episodes for each agent. These rollouts were recorded during training and demonstrate qualitative differences in decision-making and path quality.
 
-| Agent     | RGB Video | Depth Video |
-|-----------|-----------|-------------|
-| Random    | <video width="320" height="240" controls>
-  <source src="assets/FloorPlan_Train3_2_random_rgb.mp4" type="video/mp4">
-</video> | <video width="320" height="240" controls>
-  <source src="assets/FloorPlan_Train3_2_random_depth.mp4" type="video/mp4">
-</video> |
-| Heuristic | [▶️](videos/heuristic_rgb.mp4) | [▶️](videos/heuristic_depth.mp4) |
-| DQN       | [▶️](videos/dqn_rgb.mp4) | [▶️](videos/dqn_depth.mp4) |
-| PPO       | [▶️](videos/ppo_rgb.mp4) | [▶️](videos/ppo_depth.mp4) |
+
+<video width="320" height="240" controls src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/dqn corner scene.mp4" type="video/mp4"></video> | <video width="320" height="240" controls src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/DQN couch scene.mp4" type="video/mp4"></video> 
+|:--------------------------------:|:--------------------------------:|
+| Table                        | Couch                        |
+
 
 ---
 
