@@ -130,7 +130,7 @@ At each timestep, the reward is computed as:
 |----------------------|-----------------------------------------------------------------------------------|
 | **Base step penalty**       | \(-0.01 \) per step                                      |
 | **Collision penalty**       | \(-1.0 \) if `action fails`            |
-| **Distance shaping**        | \(2 \cdot (\text{prev\_dist} - \text{curr\_dist}) \) |
+| **Distance shaping**        | \(2 \cdot (prev\_dist - curr\_dist) \) |
 | **Loop penalty**            | \( -0.2 \) if action is RotateLeft/Right or LookUp/Down     |
 | **Stationary penalty**       | \( -0.05 \) if action is Look or Rotate                                     |
 | **Depth navigation bonus**  | \( +0.1 \) if `MoveAhead` follows `LookUp` or `LookDown`                   |
