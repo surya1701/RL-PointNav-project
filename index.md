@@ -62,9 +62,10 @@ We use the [AllenAct](https://github.com/allenai/allenact) implementation of the
 ```
 
 Example of one of the scenes from the dataset, with the green dot denoting the start point and the red dot denoting the end point.
-| ![Top Down view of one of the scene](https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/harder_top_down_view.png) | ![Top Down view of one of the scene](https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/harder_top_down_view.png) |
-|--------------------------------|:--------------------------------|
-| Scene 1 | Scene 2 |
+
+| Scene 1         | Scene 2       |
+|-------------------------|------------------------|
+|<img width="320"  src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/harder_top_down_view.png"/>  | <img width="320"  src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/top_down_view.png"/> |
 
 
 Please note that the top-level view is just for demonstration, the dataset training is done on the egocentric view of the agent.
@@ -304,10 +305,9 @@ The following plot compares the training reward trajectories of our learning-bas
 
 The following videos show full PointNav episodes for each agent. These rollouts were recorded during training and demonstrate qualitative differences in decision-making and path quality.
 
-
-|<video width="320" height="240" controls src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/dqn corner scene.mp4" type="video/mp4"></video> | <video width="320" height="240" controls src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/DQN couch scene.mp4" type="video/mp4"></video> |
-|--------------------------------|--------------------------------|
-| Table                        | Couch                        |
+| Table         | Couch       |
+|-------------------------|------------------------|
+|<video width="320" height="240" controls src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/dqn corner scene.mp4" type="video/mp4"></video> | <video width="320" height="240" controls  src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/DQN couch scene.mp4"></video> |
 
 
 ---
