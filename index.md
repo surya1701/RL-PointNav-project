@@ -15,10 +15,9 @@ layout: default
 
 ## Abstract
 
-In this project, we investigate the problem of Point Navigation (PointNav) in realistic 3D indoor environments using the RoboTHOR simulation platform. The objective is to train an agent to reach a target location using first-person visual input, without access to a map or GPS. We explore a range of navigation strategies, from naive random action selection and rule-based heuristics to learning-based approaches using reinforcement learning (RL) algorithms.
+In this project, we investigate the problem of Point Navigation (PointNav) in realistic 3D indoor environments using the RoboTHOR simulation platform. The objective is to train an agent to reach a target location using first-person visual input, without access to a map or GPS. We explore a range of navigation strategies, from rule-based heuristics to learning-based approaches using reinforcement learning (RL) algorithms.
 
 To benchmark and compare performance, we evaluate each agent under the same environment constraints and goal conditions. The agents include:
-- A **Random policy**, as a lower-bound baseline.
 - A **Heuristic policy** that rotates toward the goal and attempts to move forward.
 - A **DQN agent** that learns a Q-value function over discretized actions from visual inputs.
 - A **PPO agent**, using an actor-critic framework with advantage-based policy updates.
@@ -314,7 +313,6 @@ The following videos show full PointNav episodes for each agent. These rollouts 
 
 ### 📝 Observations and Insights
 
-- **Random Agent** often spins in place and makes no meaningful progress.
 - **Heuristic Agent** performs better in obstacle-free layouts but fails in more complex rooms.
 - **DQN Agent** demonstrates learning, but occasionally gets stuck or hesitates due to value approximation noise.
 - **PPO Agent** is consistently better at exploiting the shaped reward and avoids repetitive loops.
