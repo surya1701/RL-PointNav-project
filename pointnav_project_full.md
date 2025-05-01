@@ -335,7 +335,11 @@ The following videos show full PointNav episodes for each agent. These rollouts 
 
 | Agent     | RGB Video | Depth Video |
 |-----------|-----------|-------------|
-| Random    | [▶️](videos/random_rgb.mp4) | [▶️](videos/random_depth.mp4) |
+| Random    | <video width="320" height="240" controls>
+  <source src="assets/FloorPlan_Train3_2_random_rgb.mp4" type="video/mp4">
+</video> | <video width="320" height="240" controls>
+  <source src="assets/FloorPlan_Train3_2_random_depth.mp4" type="video/mp4">
+</video> |
 | Heuristic | [▶️](videos/heuristic_rgb.mp4) | [▶️](videos/heuristic_depth.mp4) |
 | DQN       | [▶️](videos/dqn_rgb.mp4) | [▶️](videos/dqn_depth.mp4) |
 | PPO       | [▶️](videos/ppo_rgb.mp4) | [▶️](videos/ppo_depth.mp4) |
