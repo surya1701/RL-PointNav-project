@@ -3,6 +3,8 @@ title: PointNav Agents in RoboTHOR
 layout: default
 ---
 
+# PointNav Agents in RoboTHOR
+
 ### Team Members
 - Suryavardan Suresh  
 - Twishaa Sahay  
