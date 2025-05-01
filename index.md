@@ -285,7 +285,7 @@ All agents share a common training framework, including:
 
 ## Results
 
-We evaluate each agent on a held-out set of RoboTHOR PointNav episodes. Performance is assessed via:
+Performance is assessed via:
 
 - **Average episode reward** (shaped via our custom function)
 - **Qualitative behavior** through video analysis
@@ -296,9 +296,8 @@ We evaluate each agent on a held-out set of RoboTHOR PointNav episodes. Performa
 
 The following plot compares the training reward trajectories of our learning-based agents (DQN and PPO). PPO demonstrates more stable improvement, while DQN is more volatile but capable of sharp gains.
 
-![Training Reward Curves](images/reward_plot_comparison.png)
-
-> *Figure: Smoothed episodic reward across 500 episodes for DQN and PPO. Reward range: -15 to 25.*
+<img src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/dqn_plot.jpeg"/>
+<img src="https://github.com/surya1701/RL-PointNav-project/raw/refs/heads/main/assets/ppo_plot.jpeg"/>
 
 ---
 
