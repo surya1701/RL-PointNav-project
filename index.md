@@ -319,7 +319,7 @@ The following videos show full PointNav episodes for each agent. These rollouts 
 
 1. [AI2-THOR](https://ai2thor.allenai.org)  
 2. [AllenAct](https://github.com/allenai/allenact)  
-3. [Target-Driven Navigation](https://arxiv.org/abs/1609.05143) — Zhu et al.  
+3. [Recurrent PPO](https://iclr-blog-track.github.io/2022/03/25/ppo-implementation-details/) 
 4. [DQN - DeepMind](https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf)  
 5. [PPO - Schulman et al.](https://arxiv.org/abs/1707.06347)  
 6. [RoboTHOR Documentation](https://allenai.github.io/robothor)
